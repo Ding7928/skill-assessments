@@ -1,0 +1,36 @@
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+BiocManager::install("maftools")
+library(maftools)
+tcgaAvailable()
+lgg <- tcgaLoad(study = "LGG")
+lgg
+
+write.mafSummary(maf = lgg, basename = 'lgg')
+plotmafSummary(maf=lgg,rmOutlier=TRUE, addStat="median", dashboard=TRUE, titvRaw = FALSE)
+
+# Generate an oncoplot of the top five mutated genes
+oncoplot(lgg, top = 5)
+
+# Calculate the transition-to-transversion ratio
+transitions <- rowSums(lgg@maf[, c("ref", "alt")] == c("A", "G"), na.rm = TRUE) +
+  rowSums(lgg@maf[, c("ref", "alt")] == c("C", "T"), na.rm = TRUE)
+transversions <- rowSums(lgg@maf[, c("ref", "alt")] %in% c("A", "G", "C", "T") == FALSE, na.rm = TRUE)
+ratio <- transitions / transversions
+
+# Generate a boxplot of the transition-to-transversion ratio
+boxplot(ratio, main = "Transition-to-Transversion Ratio", ylab = "Ratio")
+
+# Calculate mutation load for LGG cohort
+mutation_load <- log10(maf_nMutations(lgg))
+
+# Generate a plot comparing mutation load in LGG cohort to other TCGA cohorts (using log scale)
+plotMutationLoad(mutation_load, mutation_load_others)
+
+titv(lgg, useSyn = FALSE, plot = TRUE, file = NULL)
+
+# Compare mutation load against TCGA cohorts
+lgg.mutload = tcgaCompare(maf = lgg, cohortName = 'LGG')
+
+
