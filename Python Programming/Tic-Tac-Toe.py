@@ -30,10 +30,9 @@ def get_player_move(board: str, player: str, dimension: int):
         try:
             player_input = input(f"Player {player}, enter your move (1-{count}): ")
             if player_input == 'exit':
-                break
+                return -1, -1
                 
-            
-            move = int(input(f"Player {player}, enter your move (1-{count}): "))
+            move = int(player_input)
             if move < 1 or move > count:
                 raise ValueError
             row = (move - 1) // dimension
