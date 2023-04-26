@@ -90,30 +90,63 @@ def start_game(dimension: int, vals: list):
     print_board(board, dimension)
     
     while True:
-        row, col = get_player_move(board, player, dimension)
-        if [row, col] == [-1, -1]:
-            print('quit game...')
-            break
 
-        board[row][col] = player
-        print_board(board, dimension)
-        if check_win(board, player, dimension):
-            print("Player", player, "wins!")
-            break
-        if check_tie(board):
-            print("It's a tie!")
-            break
+        if player == 'X':
+            # when player selects X, player moves first.
+            row, col = get_player_move(board, player, dimension)
+            if [row, col] == [-1, -1]:
+                print('quit game...')
+                break
 
-        row, col = get_computer_move(board, dimension)
-        board[row][col] = computer
-        print("Computer plays at cell", (row * dimension) + col + 1)
-        print_board(board, dimension)
-        if check_win(board, computer, dimension):
-            print("Player", computer, "wins!")
-            break
-        if check_tie(board):
-            print("It's a tie!")
-            break
+            board[row][col] = player
+            print_board(board, dimension)
+            if check_win(board, player, dimension):
+                print("Player", player, "wins!")
+                break
+            if check_tie(board):
+                print("It's a tie!")
+                break
+
+            row, col = get_computer_move(board, dimension)
+            board[row][col] = computer
+            print("Computer plays at cell", (row * dimension) + col + 1)
+            print_board(board, dimension)
+            
+            if check_win(board, computer, dimension):
+                print("Player", computer, "wins!")
+                break
+            if check_tie(board):
+                print("It's a tie!")
+                break
+
+
+        if player == 'O':
+            # when player selects O, computer moves first.
+            row, col = get_computer_move(board, dimension)
+            board[row][col] = computer
+            print("Computer plays at cell", (row * dimension) + col + 1)
+            print_board(board, dimension)
+            
+            if check_win(board, computer, dimension):
+                print("Player", computer, "wins!")
+                break
+            if check_tie(board):
+                print("It's a tie!")
+                break
+
+            row, col = get_player_move(board, player, dimension)
+            if [row, col] == [-1, -1]:
+                print('quit game...')
+                break
+
+            board[row][col] = player
+            print_board(board, dimension)
+            if check_win(board, player, dimension):
+                print("Player", player, "wins!")
+                break
+            if check_tie(board):
+                print("It's a tie!")
+                break
 
 # Start the game
 
